@@ -1,0 +1,34 @@
+{
+    "name": "fabric-wallet-migration",
+    "version": "0.0.1",
+    "description": "Migration from Hyperledger Fabric 1.4 to 2.0 wallets",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "scripts": {
+        "clean": "rm -rf dist",
+        "compile": "tsc --project .",
+        "test": "jest test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bestbeforetoday/fabric-wallet-migration.git"
+    },
+    "author": {
+        "name": "Mark S. Lewis",
+        "email": "Mark.S.Lewis@outlook.com"
+    },
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/bestbeforetoday/fabric-wallet-migration/issues"
+    },
+    "homepage": "https://github.com/bestbeforetoday/fabric-wallet-migration#readme",
+    "devDependencies": {
+        "@types/jest": "^25.1.3",
+        "jest": "^25.1.0",
+        "ts-jest": "^25.2.1",
+        "typescript": "^3.8.2"
+    },
+    "dependencies": {
+        "fabric-network": "^1.4.6"
+    }
+}
