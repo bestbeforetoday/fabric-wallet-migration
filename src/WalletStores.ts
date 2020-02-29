@@ -2,10 +2,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { FileSystemWallet } from "fabric-network";
-import { WalletStoreAdapter } from "./WalletStoreAdapter";
+import { FileSystemWalletStoreV1 } from "./FileSystemWalletStoreV1";
 
 export function newFileSystemWalletStore(directory: string) {
-    const wallet = new FileSystemWallet(directory);
-    return new WalletStoreAdapter(wallet);
+    return new FileSystemWalletStoreV1(directory);
 }
