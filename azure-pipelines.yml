@@ -9,13 +9,31 @@ trigger:
 pool:
   vmImage: 'ubuntu-18.04'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+stages:
 
-- script: |
-    npm install
-    npm test
-  displayName: 'npm install and build'
+- stage: Test
+  displayName: Setup and run tests
+
+  jobs: 
+
+    - job: Test
+      displayName: Test with
+      strategy:
+        matrix:
+          'Node.js 10':
+            versionSpec: '10.x'
+          'Node.js 12':
+            versionSpec: '12.x'
+
+      steps:
+
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "$(versionSpec)"
+        displayName: 'Install Node.js'
+
+      - script: npm install
+        displayName: 'npm install'
+
+      - script: npm test
+        displayName: 'Run tests'
