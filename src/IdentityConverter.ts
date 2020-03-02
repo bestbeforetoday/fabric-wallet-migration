@@ -35,7 +35,7 @@ export class IdentityConverter implements IdentityConverter {
                 identity: {
                     certificate: storeData.credentials.certificate,
                 },
-                signingIdentity: uuid.v4().replace("-", "")
+                signingIdentity: uuid.v4()
             }
         };
         const privateKey = storeData.credentials.privateKey;

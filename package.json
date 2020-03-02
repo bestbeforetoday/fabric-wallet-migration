@@ -5,10 +5,10 @@
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
-        "clean": "rm -rf dist",
-        "compile": "tsc --project .",
-        "prepack": "npm run clean && npm run compile && npm test",
-        "test": "jest test"
+        "clean": "rm -rf dist *.tgz",
+        "compile": "tsc",
+        "scenario": "./runScenario.sh",
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -30,7 +30,7 @@
         "fabric-network": "^1.4.7",
         "jest": "^25.1.0",
         "ts-jest": "^25.2.1",
-        "typescript": "^3.8.2"
+        "typescript": "^3.8.3"
     },
     "dependencies": {
         "rimraf": "^3.0.2",
