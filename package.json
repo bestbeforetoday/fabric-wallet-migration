@@ -1,6 +1,6 @@
 {
     "name": "fabric-wallet-migration",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "Migration from Hyperledger Fabric 1.4 to 2.0 wallets",
     "main": "index.js",
     "types": "index.d.ts",

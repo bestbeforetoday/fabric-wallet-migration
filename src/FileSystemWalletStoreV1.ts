@@ -23,7 +23,7 @@ export class FileSystemWalletStoreV1 {
         this.directory = directory;
     }
 
-	async get(label: string): Promise<Buffer | undefined> {
+    async get(label: string): Promise<Buffer | undefined> {
         try {
             const user = await this.getUser(label);
             const privateKey = await this.getPrivateKey(user);
@@ -35,7 +35,7 @@ export class FileSystemWalletStoreV1 {
         }
     }
 
-	async list(): Promise<string[]> {
+    async list(): Promise<string[]> {
         const dirEntries = await fs.promises.readdir(this.directory, { withFileTypes: true });
         const labels = dirEntries
             .filter((dirEntry) => dirEntry.isDirectory())
@@ -54,7 +54,7 @@ export class FileSystemWalletStoreV1 {
         return results;
     }
 
-	async put(label: string, data: Buffer): Promise<void> {
+    async put(label: string, data: Buffer): Promise<void> {
         const json = data.toString(encoding);
         const storeData = JSON.parse(json) as IdentityData;
         const { user, privateKey } = this.converter.storeDataToUser(storeData, label);
@@ -66,7 +66,7 @@ export class FileSystemWalletStoreV1 {
         }
     }
 
-	async remove(label: string): Promise<void> {
+    async remove(label: string): Promise<void> {
         const identityDir = this.getIdentityDir(label);
         await rimraf(identityDir);
     }

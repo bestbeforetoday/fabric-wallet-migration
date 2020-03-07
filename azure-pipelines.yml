@@ -14,7 +14,7 @@ stages:
 - stage: Test
   displayName: Setup and run tests
 
-  jobs: 
+  jobs:
 
     - job: Test
       displayName: Test with Node.js
