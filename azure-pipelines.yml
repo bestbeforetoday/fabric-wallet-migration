@@ -34,7 +34,7 @@ stages:
 
       - script: |
           npm install
-          npm run compile
+          npm run build
         displayName: Build
 
       - script: npm test

@@ -77,16 +77,16 @@ export class FileSystemWalletStoreV1 {
         return JSON.parse(userData.toString(encoding));
     }
 
-    private getUserPath(label: string) {
+    private getUserPath(label: string): string {
         const identityDir = this.getIdentityDir(label);
         return path.join(identityDir, label);
     }
 
-    private getIdentityDir(label: string) {
+    private getIdentityDir(label: string): string {
         return path.join(this.directory, label);
     }
 
-    private async getPrivateKey(user: User) {
+    private async getPrivateKey(user: User): Promise<string | undefined> {
         const keyPath = this.getPrivateKeyPath(user);
         try {
             const keyData = await fs.promises.readFile(keyPath);
@@ -97,25 +97,25 @@ export class FileSystemWalletStoreV1 {
         }
     }
 
-    private getPrivateKeyPath(user: User) {
+    private getPrivateKeyPath(user: User): string {
         const identityDir = this.getIdentityDir(user.name);
         const file = user.enrollment.signingIdentity + privateKeyExtension;
         return path.join(identityDir, file);
     }
 
-    private async createIdentityDir(label: string) {
+    private async createIdentityDir(label: string): Promise<void> {
         const identityDir = this.getIdentityDir(label);
         await fs.promises.mkdir(identityDir);
     }
 
-    private async writeUser(user: User, label: string) {
+    private async writeUser(user: User, label: string): Promise<void> {
         const userJson = JSON.stringify(user);
         const userData = Buffer.from(userJson);
         const userPath = this.getUserPath(label);
         await fs.promises.writeFile(userPath, userData);
     }
 
-    private async writePrivateKey(user: User, privateKey: string) {
+    private async writePrivateKey(user: User, privateKey: string): Promise<void> {
         const privateKeyPath = this.getPrivateKeyPath(user);
         await fs.promises.writeFile(privateKeyPath, privateKey);
     }

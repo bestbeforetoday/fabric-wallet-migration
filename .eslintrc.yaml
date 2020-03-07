@@ -1,0 +1,20 @@
+env:
+    node: true
+    es2017: true
+    jest: true
+root: true
+parser: '@typescript-eslint/parser'
+parserOptions:
+    sourceType: module
+    ecmaFeatures:
+        impliedStrict: true
+plugins:
+    - '@typescript-eslint'
+extends:
+    - eslint:recommended
+    - plugin:@typescript-eslint/eslint-recommended
+    - plugin:@typescript-eslint/recommended
+rules:
+    indent:
+        - error
+        - 4

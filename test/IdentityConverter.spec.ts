@@ -64,7 +64,7 @@ describe("IdentityConverter", () => {
 
     describe("#storeDataToUser", () => {
         it("throws with invalid store data type", () => {
-            (x509Data as any).type = "INVALID_TYPE";
+            (x509Data as any).type = "INVALID_TYPE"; // eslint-disable-line @typescript-eslint/no-explicit-any
             expect(() => converter.storeDataToUser(x509Data, user.name))
                 .toThrow(x509Data.type);
         });
