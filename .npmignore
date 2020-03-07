@@ -9,3 +9,4 @@ azure-pipelines.yml
 scenario
 *.tgz
 *.sh
+.eslint*

@@ -22,23 +22,23 @@ function bufferToObject(buffer: Buffer): IdentityData {
     return JSON.parse(jsonObj);
 }
 
-function objectToBuffer(jsonObj: any) {
+function objectToBuffer(jsonObj: object): Buffer {
     const json = JSON.stringify(jsonObj);
     return Buffer.from(json, "utf8");
 }
 
-async function readFile(fileName: string) {
+async function readFile(fileName: string): Promise<string> {
     const readFileAsync = util.promisify(fs.readFile);
     const filePath = path.resolve(__dirname, fileName);
     const buffer = await readFileAsync(filePath);
     return buffer.toString("utf8");
 }
 
-function stripNewlines(text: string) {
+function stripNewlines(text: string): string {
     return text.replace(/[\r\n]/g, "");
 }
 
-async function createTempDir() {
+async function createTempDir(): Promise<string> {
     const prefix = path.join(os.tmpdir(), "wallet-");
     return await fs.promises.mkdtemp(prefix);
 }
@@ -50,6 +50,16 @@ describe("FileSystemWalletStoreV1", () => {
     let wallet: Wallet;
     let store: FileSystemWalletStoreV1;
     let tempDir: string;
+
+    async function removePrivateKeyFiles(label: string): Promise<void> {
+        const identityDir = path.join(tempDir, label);
+        const files = await fs.promises.readdir(identityDir);
+        const keyFiles = files.filter((file) => file.endsWith("-priv"));
+        for (const file of keyFiles) {
+            const filePath = path.join(identityDir, file);
+            await fs.promises.unlink(filePath);
+        }
+    }
 
     beforeEach(async () => {
         tempDir = await createTempDir();
@@ -87,16 +97,6 @@ describe("FileSystemWalletStoreV1", () => {
         await rimraf(tempDir);
     });
 
-    async function removePrivateKeyFiles(label: string) {
-        const identityDir = path.join(tempDir, label);
-        const files = await fs.promises.readdir(identityDir);
-        const keyFiles = files.filter((file) => file.endsWith("-priv"));
-        for (const file of keyFiles) {
-            const filePath = path.join(identityDir, file);
-            await fs.promises.unlink(filePath);
-        }
-    }
-
     describe("#get", () => {
         it("returns undefined for identity that does not exist", async () => {
             const result = await store.get("label");
@@ -109,9 +109,9 @@ describe("FileSystemWalletStoreV1", () => {
             const buffer = await store.get("label");
 
             expect(buffer).toBeDefined;
-            const result = bufferToObject(buffer!);
+            const result = bufferToObject(buffer!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
             expect(result.credentials.privateKey).toBeDefined;
-            result.credentials.privateKey = stripNewlines(result.credentials.privateKey!);
+            result.credentials.privateKey = stripNewlines(result.credentials.privateKey!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
             expect(result).toEqual(x509Data);
         });
 
@@ -122,7 +122,7 @@ describe("FileSystemWalletStoreV1", () => {
             const buffer = await store.get("label");
 
             expect(buffer).toBeDefined;
-            const result = bufferToObject(buffer!);
+            const result = bufferToObject(buffer!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
             expect(result).toEqual(hsmData);
         });
     });
@@ -165,7 +165,7 @@ describe("FileSystemWalletStoreV1", () => {
             const data = objectToBuffer(x509Data);
 
             await store.put("label", data);
-            const result: any = await wallet.export("label");
+            const result: any = await wallet.export("label"); // eslint-disable-line @typescript-eslint/no-explicit-any
 
             // Private keys may be reformatted
             result.privateKey = stripNewlines(result.privateKey);

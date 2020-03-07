@@ -4,6 +4,13 @@
 
 import { FileSystemWalletStoreV1 } from "./FileSystemWalletStoreV1";
 
-export function newFileSystemWalletStore(directory: string) {
+interface WalletStore {
+    get(label: string): Promise<Buffer | undefined>;
+    list(): Promise<string[]>;
+    put(label: string, data: Buffer): Promise<void>;
+    remove(label: string): Promise<void>;
+}
+
+export function newFileSystemWalletStore(directory: string): WalletStore {
     return new FileSystemWalletStoreV1(directory);
 }

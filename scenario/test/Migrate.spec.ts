@@ -14,7 +14,7 @@ const rimraf = util.promisify(_rimraf);
 
 const oldWalletPath = path.resolve(__dirname, "..", "wallet");
 
-async function createTempDir() {
+async function createTempDir(): Promise<string> {
     const prefix = path.join(os.tmpdir(), "wallet-");
     return await fs.promises.mkdtemp(prefix);
 }
@@ -23,17 +23,7 @@ describe("Wallet migration", () => {
     let walletPath: string;
     let wallet: Wallet;
 
-    beforeAll(async () => {
-        walletPath = await createTempDir();
-        await migrate();
-        wallet = await Wallets.newFileSystemWallet(walletPath);
-    });
-
-    afterAll(async () => {
-        await rimraf(walletPath);
-    });
-
-    async function migrate() {
+    async function migrate(): Promise<string[]> {
         const walletStore = WalletStores.newFileSystemWalletStore(oldWalletPath);
         const oldWallet = new Wallet(walletStore);
 
@@ -52,7 +42,7 @@ describe("Wallet migration", () => {
         return migratedLabels;
     }
 
-    async function getAll() {
+    async function getAll(): Promise<Map<string, Identity>> {
         const identities = new Map<string, Identity>();
 
         const labels = await wallet.list();
@@ -65,6 +55,16 @@ describe("Wallet migration", () => {
 
         return identities;
     }
+
+    beforeAll(async () => {
+        walletPath = await createTempDir();
+        await migrate();
+        wallet = await Wallets.newFileSystemWallet(walletPath);
+    });
+
+    afterAll(async () => {
+        await rimraf(walletPath);
+    });
 
     it("has expected labels", async () => {
         const labels = await wallet.list();
