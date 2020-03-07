@@ -22,7 +22,7 @@ export class IdentityConverter implements IdentityConverter {
             }
         };
     }
-    
+
     storeDataToUser(storeData: IdentityData, label: string) {
         if (storeData.type !== x509Type) {
             throw new Error("Invalid identity type: " + storeData.type);

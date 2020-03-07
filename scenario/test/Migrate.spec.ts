@@ -36,9 +36,9 @@ describe("Wallet migration", () => {
     async function migrate() {
         const walletStore = WalletStores.newFileSystemWalletStore(oldWalletPath);
         const oldWallet = new Wallet(walletStore);
-    
+
         const newWallet = await Wallets.newFileSystemWallet(walletPath);
-    
+
         const migratedLabels: string[] = [];
         const identityLabels = await oldWallet.list();
         for (const label of identityLabels) {
@@ -48,13 +48,13 @@ describe("Wallet migration", () => {
                 migratedLabels.push(label);
             }
         }
-    
+
         return migratedLabels;
     }
-    
+
     async function getAll() {
         const identities = new Map<string, Identity>();
-        
+
         const labels = await wallet.list();
         for (const label of labels) {
             const identity = await wallet.get(label);
@@ -62,10 +62,10 @@ describe("Wallet migration", () => {
                 identities.set(label, identity);
             }
         }
-    
+
         return identities;
     }
-    
+
     it("has expected labels", async () => {
         const labels = await wallet.list();
         expect(labels).toEqual(["user1", "user2"]);

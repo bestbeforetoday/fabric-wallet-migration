@@ -3,14 +3,14 @@
  */
 
 export interface User {
-	name: string;
-	mspid: string;
-	enrollment: Enrollment;
+    name: string;
+    mspid: string;
+    enrollment: Enrollment;
 }
 
 export interface Enrollment {
-	identity: {
-		certificate: string;
-	};
-	signingIdentity: string;
+    identity: {
+        certificate: string;
+    };
+    signingIdentity: string;
 }
