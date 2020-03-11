@@ -2,4 +2,5 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-module.exports.WalletStores = require("./dist/WalletStores");
+const WalletStores = require("./dist/WalletStores");
+module.exports.newFileSystemWalletStore = WalletStores.newFileSystemWalletStore;
