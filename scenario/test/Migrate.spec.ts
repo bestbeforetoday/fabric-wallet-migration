@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { WalletStores } from "fabric-wallet-migration";
+import * as WalletMigration from "fabric-wallet-migration";
 import { Wallet, Wallets, Identity, X509Identity } from "fabric-network";
 
 import fs = require("fs");
@@ -15,7 +15,7 @@ const rimraf = util.promisify(_rimraf);
 const oldWalletPath = path.resolve(__dirname, "..", "wallet");
 
 async function createTempDir(): Promise<string> {
-    const prefix = path.join(os.tmpdir(), "wallet-");
+    const prefix = path.join(os.tmpdir(), path.sep);
     return await fs.promises.mkdtemp(prefix);
 }
 
@@ -24,7 +24,7 @@ describe("Wallet migration", () => {
     let wallet: Wallet;
 
     async function migrate(): Promise<string[]> {
-        const walletStore = WalletStores.newFileSystemWalletStore(oldWalletPath);
+        const walletStore = await WalletMigration.newFileSystemWalletStore(oldWalletPath);
         const oldWallet = new Wallet(walletStore);
 
         const newWallet = await Wallets.newFileSystemWallet(walletPath);

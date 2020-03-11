@@ -38,7 +38,4 @@ stages:
         displayName: Build
 
       - script: npm test
-        displayName: Unit test
-
-      - script: npm run scenario
-        displayName: Scenario test
+        displayName: Test

@@ -4,15 +4,12 @@
 
 import { X509WalletMixin, Identity, Wallet, FileSystemWallet } from "fabric-network";
 
-import { FileSystemWalletStoreV1 } from "../src/FileSystemWalletStoreV1";
+import { newFileSystemWalletStore, WalletStore } from "../src/WalletStores";
 import { IdentityData } from "../src/IdentityData";
+import { createTempDir, stripNewlines, readFile, rmdir } from "./TestUtils";
 
 import fs = require("fs");
-import util = require("util");
 import path = require("path");
-import os = require("os");
-import _rimraf = require("rimraf");
-const rimraf = util.promisify(_rimraf);
 
 const certificateFile = "certificate.pem";
 const privateKeyFile = "privateKey.pem";
@@ -27,28 +24,12 @@ function objectToBuffer(jsonObj: object): Buffer {
     return Buffer.from(json, "utf8");
 }
 
-async function readFile(fileName: string): Promise<string> {
-    const readFileAsync = util.promisify(fs.readFile);
-    const filePath = path.resolve(__dirname, fileName);
-    const buffer = await readFileAsync(filePath);
-    return buffer.toString("utf8");
-}
-
-function stripNewlines(text: string): string {
-    return text.replace(/[\r\n]/g, "");
-}
-
-async function createTempDir(): Promise<string> {
-    const prefix = path.join(os.tmpdir(), "wallet-");
-    return await fs.promises.mkdtemp(prefix);
-}
-
 describe("FileSystemWalletStoreV1", () => {
     let identity: Identity;
     let x509Data: IdentityData;
     let hsmData: IdentityData;
     let wallet: Wallet;
-    let store: FileSystemWalletStoreV1;
+    let store: WalletStore;
     let tempDir: string;
 
     async function removePrivateKeyFiles(label: string): Promise<void> {
@@ -90,11 +71,11 @@ describe("FileSystemWalletStoreV1", () => {
 
         identity = X509WalletMixin.createIdentity(mspId, certificate, privateKey);
 
-        store = new FileSystemWalletStoreV1(tempDir);
+        store = await newFileSystemWalletStore(tempDir);
     });
 
     afterEach(async () => {
-        await rimraf(tempDir);
+        await rmdir(tempDir);
     });
 
     describe("#get", () => {
