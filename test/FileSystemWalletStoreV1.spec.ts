@@ -8,8 +8,8 @@ import { newFileSystemWalletStore, WalletStore } from "../src/WalletStores";
 import { IdentityData } from "../src/IdentityData";
 import { createTempDir, stripNewlines, readFile, rmdir } from "./TestUtils";
 
-import fs = require("fs");
-import path = require("path");
+import * as fs from "fs";
+import * as path from "path";
 
 const certificateFile = "certificate.pem";
 const privateKeyFile = "privateKey.pem";
@@ -19,7 +19,7 @@ function bufferToObject(buffer: Buffer): IdentityData {
     return JSON.parse(jsonObj);
 }
 
-function objectToBuffer(jsonObj: object): Buffer {
+function objectToBuffer(jsonObj: unknown): Buffer {
     const json = JSON.stringify(jsonObj);
     return Buffer.from(json, "utf8");
 }
@@ -122,7 +122,7 @@ describe("FileSystemWalletStoreV1", () => {
             expect(result).toEqual(["label"]);
         });
 
-        it("ignores spurios files", async () => {
+        it("ignores spurious files", async () => {
             const filePath = path.join(tempDir, "fail");
             await fs.promises.writeFile(filePath, "");
 

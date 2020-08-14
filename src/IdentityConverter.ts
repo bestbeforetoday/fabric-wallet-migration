@@ -5,7 +5,7 @@
 import { User } from "./User";
 import { IdentityData } from "./IdentityData";
 
-import uuid = require("uuid");
+import * as uuid from "uuid";
 
 const hsmType = "HSM-X.509";
 const x509Type = "X.509";

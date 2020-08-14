@@ -5,11 +5,11 @@
 import * as WalletMigration from "fabric-wallet-migration";
 import { Wallet, Wallets, Identity, X509Identity } from "fabric-network";
 
-import fs = require("fs");
-import os = require("os");
-import path = require("path");
-import util = require("util");
-import _rimraf = require("rimraf");
+import * as fs  from "fs";
+import * as os from "os";
+import * as path from "path";
+import * as util from "util";
+import * as _rimraf from "rimraf";
 const rimraf = util.promisify(_rimraf);
 
 const oldWalletPath = path.resolve(__dirname, "..", "wallet");

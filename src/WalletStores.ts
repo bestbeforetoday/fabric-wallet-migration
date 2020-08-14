@@ -4,7 +4,7 @@
 
 import { FileSystemWalletStoreV1 } from "./FileSystemWalletStoreV1";
 
-import fs = require("fs");
+import * as fs from "fs";
 
 export interface WalletStore {
     get(label: string): Promise<Buffer | undefined>;
