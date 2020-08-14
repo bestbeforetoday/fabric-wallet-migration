@@ -1,11 +1,11 @@
 This module provides a custom WalletStore implementation that allows a Hyperledger Fabric version 1.4 wallet to be
 used with the Hyperledger Fabric version 2.0 SDK for Node.
 
-## Example migration from 1.4 to 2.0 wallet format
+## Example migration from v1.4 to v2 wallet format
 
 ```javascript
 import * as WalletMigration from "fabric-wallet-migration";
-import { Wallet, Wallets } from "fabric-network";
+import { Wallet, Wallets } from "fabric-network"; // fabric-network v2
 
 async function migrateWallet(oldWalletDirectory: string, newWalletDirectory: string) {
     const walletStore = await WalletMigration.newFileSystemWalletStore(oldWalletDirectory);

@@ -6,10 +6,10 @@ import { User } from "./User";
 import { IdentityConverter } from "./IdentityConverter";
 import { IdentityData } from "./IdentityData";
 
-import path = require("path");
-import fs = require("fs");
-import util = require("util");
-import _rimraf = require("rimraf");
+import * as path from "path";
+import * as fs from "fs";
+import * as util from "util";
+import * as _rimraf  from "rimraf";
 const rimraf = util.promisify(_rimraf);
 
 const encoding = "utf8";
