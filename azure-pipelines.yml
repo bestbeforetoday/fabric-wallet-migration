@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-18.04'
+  vmImage: 'ubuntu-20.04'
 
 stages:
 
@@ -24,6 +24,8 @@ stages:
             versionSpec: '10.x'
           '12':
             versionSpec: '12.x'
+          '14':
+            versionSpec: '14.x'
 
       steps:
 
