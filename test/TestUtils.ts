@@ -6,7 +6,7 @@ import * as fs from "fs";
 import * as util from "util";
 import * as path from "path";
 import * as os from "os";
-import * as _rimraf from "rimraf";
+import _rimraf from "rimraf";
 const rimraf = util.promisify(_rimraf);
 
 export async function readFile(fileName: string): Promise<string> {
@@ -26,4 +26,11 @@ export async function createTempDir(): Promise<string> {
 
 export async function rmdir(path: string): Promise<void> {
     await rimraf(path);
+}
+
+export function assertDefined<T>(value: T | undefined): T {
+    if (value == undefined) {
+        throw new Error("Expected a value but got undefined");
+    }
+    return value;
 }

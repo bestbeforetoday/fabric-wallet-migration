@@ -6,7 +6,7 @@ import { X509WalletMixin, Identity, Wallet, FileSystemWallet } from "fabric-netw
 
 import { newFileSystemWalletStore, WalletStore } from "../src/WalletStores";
 import { IdentityData } from "../src/IdentityData";
-import { createTempDir, stripNewlines, readFile, rmdir } from "./TestUtils";
+import { createTempDir, stripNewlines, readFile, rmdir, assertDefined } from "./TestUtils";
 
 import * as fs from "fs";
 import * as path from "path";
@@ -16,7 +16,7 @@ const privateKeyFile = "privateKey.pem";
 
 function bufferToObject(buffer: Buffer): IdentityData {
     const jsonObj = buffer.toString("utf8");
-    return JSON.parse(jsonObj);
+    return JSON.parse(jsonObj) as IdentityData;
 }
 
 function objectToBuffer(jsonObj: unknown): Buffer {
@@ -81,7 +81,7 @@ describe("FileSystemWalletStoreV1", () => {
     describe("#get", () => {
         it("returns undefined for identity that does not exist", async () => {
             const result = await store.get("label");
-            expect(result).toBeUndefined;
+            expect(result).toBeUndefined();
         });
 
         it("returns store data for X.509 identity", async () => {
@@ -89,10 +89,9 @@ describe("FileSystemWalletStoreV1", () => {
 
             const buffer = await store.get("label");
 
-            expect(buffer).toBeDefined;
-            const result = bufferToObject(buffer!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
-            expect(result.credentials.privateKey).toBeDefined;
-            result.credentials.privateKey = stripNewlines(result.credentials.privateKey!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            const result = bufferToObject(assertDefined(buffer));
+            const privateKey = assertDefined(result.credentials.privateKey);
+            result.credentials.privateKey = stripNewlines(privateKey);
             expect(result).toEqual(x509Data);
         });
 
@@ -102,8 +101,7 @@ describe("FileSystemWalletStoreV1", () => {
 
             const buffer = await store.get("label");
 
-            expect(buffer).toBeDefined;
-            const result = bufferToObject(buffer!); // eslint-disable-line @typescript-eslint/no-non-null-assertion
+            const result = bufferToObject(assertDefined(buffer));
             expect(result).toEqual(hsmData);
         });
     });
@@ -146,10 +144,10 @@ describe("FileSystemWalletStoreV1", () => {
             const data = objectToBuffer(x509Data);
 
             await store.put("label", data);
-            const result: any = await wallet.export("label"); // eslint-disable-line @typescript-eslint/no-explicit-any
+            const result: Identity & { privateKey?: string } = await wallet.export("label");
 
             // Private keys may be reformatted
-            result.privateKey = stripNewlines(result.privateKey);
+            result.privateKey = stripNewlines(result.privateKey ?? "");
             expect(result).toEqual(identity);
         });
 
@@ -177,6 +175,6 @@ describe("FileSystemWalletStoreV1", () => {
 
             const result = await wallet.exists("label");
             expect(result).toBe(false);
-        })
+        });
     });
 });
