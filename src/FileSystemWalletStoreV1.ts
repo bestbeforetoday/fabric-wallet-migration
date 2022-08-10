@@ -9,7 +9,7 @@ import { IdentityData } from "./IdentityData";
 import * as path from "path";
 import * as fs from "fs";
 import * as util from "util";
-import * as _rimraf  from "rimraf";
+import _rimraf  from "rimraf";
 const rimraf = util.promisify(_rimraf);
 
 const encoding = "utf8";
@@ -74,7 +74,7 @@ export class FileSystemWalletStoreV1 {
     private async getUser(label: string): Promise<User> {
         const userPath = this.getUserPath(label);
         const userData = await fs.promises.readFile(userPath);
-        return JSON.parse(userData.toString(encoding));
+        return JSON.parse(userData.toString(encoding)) as User;
     }
 
     private getUserPath(label: string): string {

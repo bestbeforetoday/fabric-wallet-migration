@@ -9,7 +9,7 @@ import * as fs  from "fs";
 import * as os from "os";
 import * as path from "path";
 import * as util from "util";
-import * as _rimraf from "rimraf";
+import _rimraf from "rimraf";
 const rimraf = util.promisify(_rimraf);
 
 const oldWalletPath = path.resolve(__dirname, "..", "wallet");

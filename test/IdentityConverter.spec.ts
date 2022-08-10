@@ -64,15 +64,15 @@ describe("IdentityConverter", () => {
 
     describe("#storeDataToUser", () => {
         it("throws with invalid store data type", () => {
-            (x509Data as any).type = "INVALID_TYPE"; // eslint-disable-line @typescript-eslint/no-explicit-any
-            expect(() => converter.storeDataToUser(x509Data, user.name))
-                .toThrow(x509Data.type);
+            const data = Object.assign({}, x509Data, { type: "INVALID_TYPE" });
+            expect(() => converter.storeDataToUser(data, user.name))
+                .toThrow(data.type);
         });
 
         it("converts X.509 store data to identity", () => {
             const result = converter.storeDataToUser(x509Data, user.name);
 
-            user.enrollment.signingIdentity = expect.stringMatching(/.+/);
+            user.enrollment.signingIdentity = expect.stringMatching(/.+/); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
             expect(result.user).toMatchObject(user);
             expect(result.privateKey).toEqual(x509Data.credentials.privateKey);
         });
