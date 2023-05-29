@@ -1,17 +1,16 @@
-/**
+/*
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { newFileSystemWalletStore } from "../src/WalletStores";
-import { createTempDir, rmdir } from "./TestUtils";
+import { newFileSystemWalletStoreV1 } from "../src";
+import { nonExistentDirectory } from "./TestUtils";
 
 describe("WalletStores", () => {
-    it("throws if file system wallet directory does not exist", async () => {
-        const dir = await createTempDir();
-        await rmdir(dir);
+    it("throws if V1 file system wallet directory does not exist", async () => {
+        const dir = await nonExistentDirectory();
 
-        const f = newFileSystemWalletStore(dir);
+        const promise = newFileSystemWalletStoreV1(dir);
 
-        await expect(f).rejects.toThrow(dir);
+        await expect(promise).rejects.toThrow(dir);
     });
 });

@@ -1,10 +1,8 @@
-/**
+/*
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { FileSystemWalletStoreV1 } from "./FileSystemWalletStoreV1";
-
-import * as fs from "fs";
 
 export interface WalletStore {
     get(label: string): Promise<Buffer | undefined>;
@@ -13,7 +11,11 @@ export interface WalletStore {
     remove(label: string): Promise<void>;
 }
 
-export async function newFileSystemWalletStore(directory: string): Promise<WalletStore> {
-    await fs.promises.access(directory); // Throws if directory does not exist
-    return new FileSystemWalletStoreV1(directory);
+/**
+ * Creates a wallets store that can access a V1 file system wallet.
+ * @param directory A directory path.
+ * @returns A wallet store.
+ */
+export async function newFileSystemWalletStoreV1(directory: string): Promise<WalletStore> {
+    return FileSystemWalletStoreV1.newInstance(directory);
 }

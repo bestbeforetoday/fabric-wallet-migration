@@ -1,15 +1,15 @@
-/**
+/*
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import { X509WalletMixin, Identity, Wallet, FileSystemWallet } from "fabric-network";
 
-import { newFileSystemWalletStore, WalletStore } from "../src/WalletStores";
-import { IdentityData } from "../src/IdentityData";
-import { createTempDir, stripNewlines, readFile, rmdir, assertDefined } from "./TestUtils";
+import { newFileSystemWalletStoreV1, WalletStore } from "../src";
+import { IdentityData } from "../src/FileSystemWalletStoreV1";
+import { createTempDir, stripNewlines, readFile, rimraf, assertDefined } from "./TestUtils";
 
-import * as fs from "fs";
-import * as path from "path";
+import { promises as fs } from "node:fs";
+import * as path from "node:path";
 
 const certificateFile = "certificate.pem";
 const privateKeyFile = "privateKey.pem";
@@ -34,11 +34,11 @@ describe("FileSystemWalletStoreV1", () => {
 
     async function removePrivateKeyFiles(label: string): Promise<void> {
         const identityDir = path.join(tempDir, label);
-        const files = await fs.promises.readdir(identityDir);
+        const files = await fs.readdir(identityDir);
         const keyFiles = files.filter((file) => file.endsWith("-priv"));
         for (const file of keyFiles) {
             const filePath = path.join(identityDir, file);
-            await fs.promises.unlink(filePath);
+            await fs.unlink(filePath);
         }
     }
 
@@ -71,14 +71,14 @@ describe("FileSystemWalletStoreV1", () => {
 
         identity = X509WalletMixin.createIdentity(mspId, certificate, privateKey);
 
-        store = await newFileSystemWalletStore(tempDir);
+        store = await newFileSystemWalletStoreV1(tempDir);
     });
 
     afterEach(async () => {
-        await rmdir(tempDir);
+        await rimraf(tempDir);
     });
 
-    describe("#get", () => {
+    describe("get", () => {
         it("returns undefined for identity that does not exist", async () => {
             const result = await store.get("label");
             expect(result).toBeUndefined();
@@ -106,7 +106,7 @@ describe("FileSystemWalletStoreV1", () => {
         });
     });
 
-    describe("#list", () => {
+    describe("list", () => {
         it("returns empty array for empty wallet", async () => {
             const result = await store.list();
             expect(result).toHaveLength(0);
@@ -122,7 +122,7 @@ describe("FileSystemWalletStoreV1", () => {
 
         it("ignores spurious files", async () => {
             const filePath = path.join(tempDir, "fail");
-            await fs.promises.writeFile(filePath, "");
+            await fs.writeFile(filePath, "");
 
             const result = await store.list();
 
@@ -131,7 +131,7 @@ describe("FileSystemWalletStoreV1", () => {
 
         it("ignores spurios subdirectories", async () => {
             const dirPath = path.join(tempDir, "fail");
-            await fs.promises.mkdir(dirPath);
+            await fs.mkdir(dirPath);
 
             const result = await store.list();
 
@@ -139,7 +139,7 @@ describe("FileSystemWalletStoreV1", () => {
         });
     });
 
-    describe("#put", () => {
+    describe("put", () => {
         it("adds X.509 identity to wallet", async () => {
             const data = objectToBuffer(x509Data);
 
@@ -160,7 +160,7 @@ describe("FileSystemWalletStoreV1", () => {
         });
     });
 
-    describe("#remove", () => {
+    describe("remove", () => {
         it("does nothing for non-existent identity", async () => {
             await store.remove("label");
 

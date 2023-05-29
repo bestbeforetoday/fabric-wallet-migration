@@ -5,10 +5,10 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "engines": {
-        "node": ">=18.18.0"
+        "node": ">=20"
     },
     "scripts": {
-        "build": "npm-run-all clean compile copy-non-ts-source",
+        "build": "npm run clean && npm run compile && npm run copy-non-ts-source",
         "clean": "rm -rf dist *.tgz scenario/package-lock.json scenario/node_modules",
         "compile": "tsc --build tsconfig.build.json",
         "copy-non-ts-source": "rsync -rv --prune-empty-dirs --include='*.d.ts' --exclude='*.ts' src/ dist",
@@ -16,7 +16,7 @@
         "format:fix": "prettier '**/*.{ts,js}' --write",
         "lint": "eslint",
         "scenario": "./runScenario.sh",
-        "test": "npm-run-all lint format unitTest build scenario",
+        "test": "npm run lint && npm run format && npm run unitTest && npm run build && npm run scenario",
         "unitTest": "jest"
     },
     "repository": {
@@ -33,19 +33,18 @@
     },
     "homepage": "https://github.com/bestbeforetoday/fabric-wallet-migration#readme",
     "devDependencies": {
-        "@eslint/js": "^9.13.0",
-        "@tsconfig/node18": "^18.2.4",
+        "@eslint/js": "^9.25.1",
+        "@tsconfig/node20": "^20.1.5",
         "@types/jest": "^29.5.14",
-        "@types/node": "^18.19.62",
-        "eslint": "^9.13.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-jest": "^28.8.3",
-        "fabric-network": "^1.4.13",
+        "@types/node": "^20.17.31",
+        "eslint": "^9.25.1",
+        "eslint-config-prettier": "^10.1.2",
+        "eslint-plugin-jest": "^28.11.0",
+        "fabric-network": "^1.4.20",
         "jest": "^29.7.0",
-        "npm-run-all": "^4.1.5",
-        "prettier": "^3.3.3",
-        "ts-jest": "^29.2.5",
-        "typescript": "~5.6.0",
-        "typescript-eslint": "^8.12.2"
+        "prettier": "^3.5.3",
+        "ts-jest": "^29.3.2",
+        "typescript": "~5.8.3",
+        "typescript-eslint": "^8.31.0"
     }
 }
