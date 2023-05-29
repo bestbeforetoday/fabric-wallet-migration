@@ -8,9 +8,7 @@ import { IdentityData } from "./IdentityData";
 
 import * as path from "path";
 import * as fs from "fs";
-import * as util from "util";
-import _rimraf  from "rimraf";
-const rimraf = util.promisify(_rimraf);
+import { rimraf }  from "rimraf";
 
 const encoding = "utf8";
 const privateKeyExtension = "-priv";

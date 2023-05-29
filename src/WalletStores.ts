@@ -4,7 +4,7 @@
 
 import { FileSystemWalletStoreV1 } from "./FileSystemWalletStoreV1";
 
-import * as fs from "fs";
+import { promises as fs } from "fs";
 
 export interface WalletStore {
     get(label: string): Promise<Buffer | undefined>;
@@ -14,6 +14,6 @@ export interface WalletStore {
 }
 
 export async function newFileSystemWalletStore(directory: string): Promise<WalletStore> {
-    await fs.promises.access(directory); // Throws if directory does not exist
+    await fs.access(directory); // Throws if directory does not exist
     return new FileSystemWalletStoreV1(directory);
 }

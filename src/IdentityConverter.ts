@@ -4,8 +4,7 @@
 
 import { User } from "./User";
 import { IdentityData } from "./IdentityData";
-
-import * as uuid from "uuid";
+import { randomUUID } from "crypto";
 
 const hsmType = "HSM-X.509";
 const x509Type = "X.509";
@@ -38,7 +37,7 @@ export class IdentityConverter implements IdentityConverter {
                 identity: {
                     certificate: storeData.credentials.certificate,
                 },
-                signingIdentity: uuid.v4()
+                signingIdentity: randomUUID()
             }
         };
         const privateKey = storeData.credentials.privateKey;
