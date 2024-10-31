@@ -5,12 +5,9 @@
 import * as WalletMigration from "fabric-wallet-migration";
 import { Wallet, Wallets, Identity, X509Identity } from "fabric-network";
 
-import * as fs  from "fs";
+import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import * as util from "util";
-import _rimraf from "rimraf";
-const rimraf = util.promisify(_rimraf);
 
 const oldWalletPath = path.resolve(__dirname, "..", "wallet");
 
@@ -63,7 +60,7 @@ describe("Wallet migration", () => {
     });
 
     afterAll(async () => {
-        await rimraf(walletPath);
+        await fs.promises.rm(walletPath, { recursive: true, force: true });
     });
 
     it("has expected labels", async () => {

@@ -23,8 +23,8 @@ describe("IdentityConverter", () => {
             mspId,
             credentials: {
                 certificate,
-                privateKey
-            }
+                privateKey,
+            },
         };
 
         hsmData = {
@@ -32,8 +32,8 @@ describe("IdentityConverter", () => {
             version: 1,
             mspId,
             credentials: {
-                certificate
-            }
+                certificate,
+            },
         };
 
         user = {
@@ -41,10 +41,10 @@ describe("IdentityConverter", () => {
             mspid: mspId,
             enrollment: {
                 identity: {
-                    certificate
+                    certificate,
                 },
-                signingIdentity: "id"
-            }
+                signingIdentity: "id",
+            },
         };
 
         converter = new IdentityConverter();
@@ -65,8 +65,7 @@ describe("IdentityConverter", () => {
     describe("#storeDataToUser", () => {
         it("throws with invalid store data type", () => {
             const data = Object.assign({}, x509Data, { type: "INVALID_TYPE" });
-            expect(() => converter.storeDataToUser(data, user.name))
-                .toThrow(data.type);
+            expect(() => converter.storeDataToUser(data, user.name)).toThrow(data.type);
         });
 
         it("converts X.509 store data to identity", () => {

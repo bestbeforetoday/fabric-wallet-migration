@@ -56,8 +56,8 @@ describe("FileSystemWalletStoreV1", () => {
             mspId,
             credentials: {
                 certificate,
-                privateKey
-            }
+                privateKey,
+            },
         };
 
         hsmData = {
@@ -65,8 +65,8 @@ describe("FileSystemWalletStoreV1", () => {
             version: 1,
             mspId,
             credentials: {
-                certificate
-            }
+                certificate,
+            },
         };
 
         identity = X509WalletMixin.createIdentity(mspId, certificate, privateKey);
