@@ -8,9 +8,6 @@ import { IdentityData } from "./IdentityData";
 
 import * as path from "path";
 import * as fs from "fs";
-import * as util from "util";
-import _rimraf  from "rimraf";
-const rimraf = util.promisify(_rimraf);
 
 const encoding = "utf8";
 const privateKeyExtension = "-priv";
@@ -30,6 +27,7 @@ export class FileSystemWalletStoreV1 {
             const storeData = this.converter.userToStoreData(user, privateKey);
             const json = JSON.stringify(storeData);
             return Buffer.from(json, encoding);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             return undefined;
         }
@@ -37,15 +35,14 @@ export class FileSystemWalletStoreV1 {
 
     async list(): Promise<string[]> {
         const dirEntries = await fs.promises.readdir(this.directory, { withFileTypes: true });
-        const labels = dirEntries
-            .filter((dirEntry) => dirEntry.isDirectory())
-            .map((dirEntry) => dirEntry.name);
+        const labels = dirEntries.filter((dirEntry) => dirEntry.isDirectory()).map((dirEntry) => dirEntry.name);
 
         const results: string[] = [];
         for (const label of labels) {
             try {
                 await this.getUser(label);
                 results.push(label);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
                 // Not a valid user
             }
@@ -68,7 +65,7 @@ export class FileSystemWalletStoreV1 {
 
     async remove(label: string): Promise<void> {
         const identityDir = this.getIdentityDir(label);
-        await rimraf(identityDir);
+        await fs.promises.rm(identityDir, { recursive: true, force: true });
     }
 
     private async getUser(label: string): Promise<User> {
@@ -91,6 +88,7 @@ export class FileSystemWalletStoreV1 {
         try {
             const keyData = await fs.promises.readFile(keyPath);
             return keyData.toString(encoding).trim();
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             // No private key
             return undefined;

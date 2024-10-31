@@ -5,7 +5,7 @@
 import { User } from "./User";
 import { IdentityData } from "./IdentityData";
 
-import * as uuid from "uuid";
+import * as crypto from "crypto";
 
 const hsmType = "HSM-X.509";
 const x509Type = "X.509";
@@ -18,12 +18,15 @@ export class IdentityConverter implements IdentityConverter {
             mspId: user.mspid,
             credentials: {
                 certificate: user.enrollment.identity.certificate,
-                privateKey
-            }
+                privateKey,
+            },
         };
     }
 
-    storeDataToUser(storeData: IdentityData, label: string): {
+    storeDataToUser(
+        storeData: IdentityData,
+        label: string,
+    ): {
         user: User;
         privateKey: string | undefined;
     } {
@@ -38,8 +41,8 @@ export class IdentityConverter implements IdentityConverter {
                 identity: {
                     certificate: storeData.credentials.certificate,
                 },
-                signingIdentity: uuid.v4()
-            }
+                signingIdentity: crypto.randomUUID(),
+            },
         };
         const privateKey = storeData.credentials.privateKey;
 

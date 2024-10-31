@@ -3,11 +3,8 @@
  */
 
 import * as fs from "fs";
-import * as util from "util";
 import * as path from "path";
 import * as os from "os";
-import _rimraf from "rimraf";
-const rimraf = util.promisify(_rimraf);
 
 export async function readFile(fileName: string): Promise<string> {
     const filePath = path.resolve(__dirname, fileName);
@@ -25,7 +22,7 @@ export async function createTempDir(): Promise<string> {
 }
 
 export async function rmdir(path: string): Promise<void> {
-    await rimraf(path);
+    await fs.promises.rm(path, { recursive: true, force: true });
 }
 
 export function assertDefined<T>(value: T | undefined): T {
