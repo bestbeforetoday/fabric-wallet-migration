@@ -4,4 +4,5 @@ module.exports = {
     collectCoverage: true,
     coverageProvider: "v8",
     testPathIgnorePatterns: ["/node_modules/", "/scenario/"],
+    verbose: true,
 };

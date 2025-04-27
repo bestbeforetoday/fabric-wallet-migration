@@ -1,9 +1,9 @@
-const jest = require("eslint-plugin-jest");
-const js = require("@eslint/js");
-const prettier = require("eslint-config-prettier");
-const tseslint = require("typescript-eslint");
+import jest from "eslint-plugin-jest";
+import js from "@eslint/js";
+import prettier from "eslint-config-prettier";
+import tseslint from "typescript-eslint";
 
-module.exports = tseslint.config(
+export default tseslint.config(
     {
         ignores: ["*", "!src/", "!test/"],
     },
@@ -13,11 +13,11 @@ module.exports = tseslint.config(
     jest.configs["flat/recommended"],
     {
         languageOptions: {
-            ecmaVersion: 2022,
+            ecmaVersion: 2023,
             sourceType: "module",
             parserOptions: {
                 project: "tsconfig.json",
-                tsconfigRootDir: __dirname,
+                tsconfigRootDir: import.meta.dirname,
             },
         },
         rules: {
