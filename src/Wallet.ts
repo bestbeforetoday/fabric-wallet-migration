@@ -27,7 +27,7 @@ export class Wallet {
     /**
      * Put an identity and private key into the wallet.
      * @param label Label used to identify the identity within the wallet.
-     * @param identity Identity to store in the wallet.
+     * @param entry Entry to store in the wallet.
      */
     public async put(label: string, entry: Entry): Promise<void> {
         const json = toJson(entry.identity, entry.privateKey);
@@ -39,7 +39,7 @@ export class Wallet {
     /**
      * Get an identity and private key from the wallet.
      * @param label Label used to identify the identity within the wallet.
-     * @returns An identity if it exists; otherwise undefined.
+     * @returns An entry if it exists; otherwise undefined.
      */
     public async get(label: string): Promise<Entry | undefined> {
         const buffer = await this.#store.get(label);
@@ -53,8 +53,8 @@ export class Wallet {
     }
 
     /**
-     * Get the labels of all identities in the wallet.
-     * @returns Identity labels.
+     * Get the labels of all entries in the wallet.
+     * @returns Entry labels.
      */
     public async list(): Promise<string[]> {
         return await this.#store.list();
@@ -62,7 +62,7 @@ export class Wallet {
 
     /**
      * Remove an entry from the wallet.
-     * @param label Label used to identify the identity within the wallet.
+     * @param label Label used to identify the entry within the wallet.
      */
     public async remove(label: string): Promise<void> {
         await this.#store.remove(label);

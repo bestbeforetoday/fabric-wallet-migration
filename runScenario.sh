@@ -13,7 +13,6 @@ createPackFile() {
 }
 
 scenarioTest() {
-    rm -rf package-lock.json node_modules
     npm install
     npm run lint
     npm run format
